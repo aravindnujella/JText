@@ -257,7 +257,7 @@ public class Actions {
 	}
 
 	private class FindAction extends AbstractAction {
-		ArrayList<Integer> searchIndex = new ArrayList<Integer>();
+		ArrayList<Integer> searchIndex;
 		int lastIndex = 0;
 		int u = copyOfCaret.caretPositionStart;
 		int stringLength;
@@ -293,10 +293,11 @@ public class Actions {
 			findFrame.getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			findFrame.pack();
 			findFrame.setVisible(true);
-
+			// searchText = new String();
 			searchButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					searchIndex = new ArrayList<Integer>();
 					String searchText = textField.getText();
 					String fileText = copyOfDocument.getText();
 					stringLength = searchText.length();
@@ -347,12 +348,15 @@ public class Actions {
 			DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(
 					Color.YELLOW);
 			Highlighter hl = copyOfDocument.getHighlighter();
-
+			hl.removeAllHighlights();
 			int l = searchIndex.size();
+			System.out.println("boo");
 			for (int i = 0; i < l; i++) {
 				try {
-					hl.addHighlight(searchIndex.get(i), searchIndex.get(i)
-							+ stringLength, highlightPainter);
+					// System.out.println(searchIndex.get(i));
+					if (searchIndex.get(i) != -1)
+						hl.addHighlight(searchIndex.get(i), searchIndex.get(i)
+								+ stringLength, highlightPainter);
 				} catch (BadLocationException e) {
 				}
 			}
@@ -361,7 +365,7 @@ public class Actions {
 	}
 
 	private class ReplaceAction extends AbstractAction {
-		ArrayList<Integer> searchIndex = new ArrayList<Integer>();
+		ArrayList<Integer> searchIndex;
 		int lastIndex = 0;
 		int u = copyOfCaret.caretPositionStart;
 		int stringLength;
@@ -417,7 +421,7 @@ public class Actions {
 					String searchText = findText.getText();
 					String fileText = copyOfDocument.getText();
 					String repText = replaceText.getText();
-
+					
 					stringLength = searchText.length();
 					if (stringLength != 0) {
 						int lastIndex = 0;
@@ -463,8 +467,10 @@ public class Actions {
 			});
 
 			searchButton.addActionListener(new ActionListener() {
+				
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					searchIndex = new ArrayList<Integer>();
 					String searchText = findText.getText();
 					String fileText = copyOfDocument.getText();
 					// System.out.println(searchText);
@@ -482,6 +488,7 @@ public class Actions {
 								// System.out.println();
 								continue;
 							}
+							
 							break;
 						}
 					// findFrame.setVisible(false);
@@ -525,9 +532,11 @@ public class Actions {
 			DefaultHighlighter.DefaultHighlightPainter highlightPainter = new DefaultHighlighter.DefaultHighlightPainter(
 					Color.YELLOW);
 			Highlighter hl = copyOfDocument.getHighlighter();
+			hl.removeAllHighlights();
 			int l = searchIndex.size();
 			for (int i = 0; i < l; i++) {
 				try {
+					if(searchIndex.get(i) != -1)
 					hl.addHighlight(searchIndex.get(i), searchIndex.get(i)
 							+ stringLength, highlightPainter);
 				} catch (BadLocationException e) {
